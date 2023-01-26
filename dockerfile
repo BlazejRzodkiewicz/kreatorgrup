@@ -31,3 +31,31 @@ CMD ["mysqld_safe"]
 
 # Expose ports.
 EXPOSE 3306
+
+
+#PHP
+
+FROM php:7.4-cli
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+CMD [ "php", "./your-script.php" ]
+
+$ docker build -t my-php-app .
+$ docker run -it --rm --name my-running-app my-php-app
+
+$ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/myapp -w /usr/src/myapp php:7.4-cli php your-script.php
+
+# syntax=docker/dockerfile:1
+
+FROM node:12.18.1
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install --production
+
+COPY . .
+
+CMD [ "node", "server.js" ]
